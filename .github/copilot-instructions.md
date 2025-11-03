@@ -8,10 +8,11 @@ Full-stack invoicing application with React/TypeScript frontend and FastAPI/Pyth
 ## Architecture
 
 ### Tech Stack
-- **Backend**: Python 3.8+, FastAPI, Pydantic, SQLite
+- **Backend**: Python 3.10, FastAPI, Pydantic, SQLite
 - **Frontend**: React, TypeScript
-- **PDF Generation**: Backend responsibility (likely ReportLab or WeasyPrint)
+- **PDF Generation**: Playwright (headless Chromium) with HTML templates
 - **Database**: SQLite with simple schema design
+- **Environment**: Conda (environment.yml)
 
 ### Project Structure
 ```
@@ -24,9 +25,10 @@ python-invoicing/
 │   │   ├── routers/         # Routes layer: FastAPI route handlers (HTTP concerns)
 │   │   ├── use_cases/       # Use-case layer: Business logic and orchestration
 │   │   ├── daos/            # Data Access Objects: Database operations
-│   │   └── db.py            # Database connection and session management
+│   │   ├── db.py            # Database connection and session management
+│   │   └── pdf_generator.py # PDF generation with Playwright
 │   ├── tests/               # Backend tests (pytest)
-│   ├── requirements.txt     # Python dependencies
+│   ├── environment.yml      # Conda environment definition
 │   └── main.py              # FastAPI application entry point
 ├── frontend/
 │   ├── src/
@@ -252,15 +254,17 @@ The frontend consists of four main pages:
 **Backend**:
 ```bash
 cd backend
-pip install -r requirements.txt
-uvicorn main:app --reload  # Runs on http://localhost:8000
+conda env create -f environment.yml  # First time only
+conda activate invoicing
+playwright install chromium          # First time only
+uvicorn main:app --reload            # Runs on http://localhost:8000
 ```
 
 **Frontend**:
 ```bash
 cd frontend
 npm install
-npm run dev  # Typically runs on http://localhost:5173 (Vite) or :3000 (CRA)
+npm run dev  # Runs on http://localhost:5173
 ```
 
 ### Adding Features

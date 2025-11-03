@@ -4,10 +4,14 @@ A full-stack invoicing application with React/TypeScript frontend and FastAPI/Py
 
 ## 🚀 Quick Start
 
+**Prerequisites**: [Conda](https://docs.conda.io/en/latest/miniconda.html) and [Node.js](https://nodejs.org/)
+
 **Backend**:
 ```bash
 cd backend
-pip install -r requirements.txt
+conda env create -f environment.yml
+conda activate invoicing
+playwright install chromium
 uvicorn main:app --reload  # http://localhost:8000
 ```
 
@@ -17,6 +21,8 @@ cd frontend
 npm install
 npm run dev  # http://localhost:5173
 ```
+
+See [QUICKSTART.md](QUICKSTART.md) for one-command setup or [SETUP.md](SETUP.md) for detailed instructions.
 
 ## 📚 Documentation
 
@@ -33,7 +39,7 @@ Clean Architecture with:
 - **DAOs** - Database operations
 - **Routers** - FastAPI HTTP endpoints
 
-**Tech Stack**: FastAPI, Pydantic, SQLAlchemy, SQLite, React, TypeScript
+**Tech Stack**: Python 3.10, FastAPI, Pydantic, SQLAlchemy, SQLite, Playwright, React, TypeScript, Conda
 
 See [ONBOARDING.md](.github/ONBOARDING.md) for detailed architecture explanation.
 
@@ -44,7 +50,7 @@ See [ONBOARDING.md](.github/ONBOARDING.md) for detailed architecture explanation
 - ✅ Auto-calculated totals
 - ✅ Invoice status tracking (draft/sent/paid/cancelled)
 - ✅ Sequential invoice numbering
-- ✅ PDF generation
+- ✅ PDF generation (Playwright + HTML templates)
 - ✅ RESTful API with OpenAPI docs
 
 ## 🎯 API Endpoints

@@ -20,6 +20,7 @@ class ClientDAO:
         )
         self.db.add(db_client)
         self.db.flush()
+        self.db.commit()
 
         # Convert back to domain model with ID
         return self._to_domain(db_client)

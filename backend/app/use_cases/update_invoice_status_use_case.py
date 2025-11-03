@@ -21,6 +21,7 @@ def execute(db: Session, invoice_id: int, new_status: str) -> Optional[Invoice]:
             f"Cannot update status from '{invoice.status}' to '{new_status}'"
         )
 
-    # Update status via DAO
+    # Update status via DAO (DAO handles commit)
     updated_invoice = invoice_dao.update_status(invoice_id, new_status)
+
     return updated_invoice

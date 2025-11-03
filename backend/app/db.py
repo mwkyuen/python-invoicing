@@ -13,7 +13,10 @@ DATABASE_URL = "sqlite:///./invoices.db"
 # Create engine
 engine = create_engine(
     DATABASE_URL,
-    connect_args={"check_same_thread": False},  # Needed for SQLite
+    connect_args={
+        "check_same_thread": False,  # Needed for SQLite
+        "timeout": 30  # Wait up to 30 seconds for lock to release
+    },
     echo=True  # Log SQL queries for debugging
 )
 

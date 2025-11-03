@@ -48,8 +48,6 @@ def create_invoice(
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
-    finally:
-        db.commit()
 
 
 @router.get("", response_model=List[InvoiceResponse])
@@ -100,8 +98,6 @@ def update_invoice_status(
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
-    finally:
-        db.commit()
 
 
 @router.get("/{invoice_id}/pdf")

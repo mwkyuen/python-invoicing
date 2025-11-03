@@ -31,8 +31,6 @@ def create_client(
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=str(e))
-    finally:
-        db.commit()
 
 
 @router.get("", response_model=List[ClientResponse])

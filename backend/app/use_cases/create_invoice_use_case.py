@@ -49,13 +49,14 @@ def execute(
     # Domain validation
     invoice.validate()
 
-    # Persist via DAO
+    # Persist via DAO (DAO handles commit)
     saved_invoice = invoice_dao.create(invoice)
 
     # Generate PDF
     try:
         from app.pdf_generator import generate_invoice_pdf
         pdf_path = generate_invoice_pdf(saved_invoice, client)
+        # Update PDF path (DAO handles commit)
         invoice_dao.update_pdf_path(saved_invoice.id, pdf_path)
         # Reload to get updated pdf_path
         saved_invoice = invoice_dao.get_by_id(saved_invoice.id)

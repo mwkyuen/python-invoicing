@@ -38,6 +38,7 @@ class InvoiceDAO:
             self.db.add(db_line_item)
 
         self.db.flush()
+        self.db.commit()
 
         # Fetch the complete invoice with line items
         return self.get_by_id(db_invoice.id)
@@ -68,6 +69,7 @@ class InvoiceDAO:
         if db_invoice:
             db_invoice.status = status
             self.db.flush()
+            self.db.commit()
             return self._to_domain(db_invoice)
         return None
 
@@ -83,6 +85,7 @@ class InvoiceDAO:
         if db_invoice:
             db_invoice.pdf_path = pdf_path
             self.db.flush()
+            self.db.commit()
             return self._to_domain(db_invoice)
         return None
 

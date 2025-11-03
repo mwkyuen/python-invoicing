@@ -19,7 +19,7 @@ def execute(db: Session, name: str, billing_address: str, email: str, phone_numb
     # Domain validation
     client.validate()
 
-    # Persist via DAO
+    # Persist via DAO (DAO handles commit)
     client_dao = ClientDAO(db)
     saved_client = client_dao.create(client)
 

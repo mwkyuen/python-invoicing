@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { clientApi } from '../api/clientApi';
 import { invoiceApi } from '../api/invoiceApi';
 import { Client } from '../types/Client';
@@ -48,6 +48,32 @@ export default function DashboardPage() {
       window.URL.revokeObjectURL(url);
     } catch (err: any) {
       alert('Failed to download PDF: ' + (err.response?.data?.detail || err.message));
+    }
+  };
+
+  const deleteInvoice = async (invoiceId: number, invoiceNumber: string) => {
+    if (!window.confirm(`Are you sure you want to delete invoice ${invoiceNumber}?`)) {
+      return;
+    }
+    try {
+      await invoiceApi.deleteInvoice(invoiceId);
+      // Reload data to reflect deletion
+      await loadData();
+    } catch (err: any) {
+      alert('Failed to delete invoice: ' + (err.response?.data?.detail || err.message));
+    }
+  };
+
+  const deleteClient = async (clientId: number, clientName: string) => {
+    if (!window.confirm(`Are you sure you want to delete client "${clientName}"?`)) {
+      return;
+    }
+    try {
+      await clientApi.deleteClient(clientId);
+      // Reload data to reflect deletion
+      await loadData();
+    } catch (err: any) {
+      alert('Failed to delete client: ' + (err.response?.data?.detail || err.message));
     }
   };
 
@@ -135,6 +161,7 @@ export default function DashboardPage() {
                   <th style={{ padding: '10px', textAlign: 'right', border: '1px solid #ddd' }}>Total</th>
                   <th style={{ padding: '10px', textAlign: 'center', border: '1px solid #ddd' }}>Status</th>
                   <th style={{ padding: '10px', textAlign: 'center', border: '1px solid #ddd' }}>Actions</th>
+                  <th style={{ padding: '10px', textAlign: 'center', border: '1px solid #ddd' }}>Delete</th>
                 </tr>
               </thead>
               <tbody>
@@ -201,6 +228,22 @@ export default function DashboardPage() {
                           )}
                         </div>
                       </td>
+                      <td style={{ padding: '10px', textAlign: 'center', border: '1px solid #ddd' }}>
+                        <button
+                          onClick={() => deleteInvoice(invoice.id, invoice.invoice_number)}
+                          style={{
+                            padding: '8px 12px',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '4px',
+                            cursor: 'pointer',
+                            fontSize: '18px',
+                          }}
+                          title="Delete Invoice"
+                        >
+                          🗑️
+                        </button>
+                      </td>
                     </tr>
                   );
                 })}
@@ -223,7 +266,9 @@ export default function DashboardPage() {
                   <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>Name</th>
                   <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>Email</th>
                   <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>Phone</th>
+                  <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>Mailing Address</th>
                   <th style={{ padding: '10px', textAlign: 'left', border: '1px solid #ddd' }}>Created</th>
+                  <th style={{ padding: '10px', textAlign: 'center', border: '1px solid #ddd' }}>Delete</th>
                 </tr>
               </thead>
               <tbody>
@@ -232,8 +277,27 @@ export default function DashboardPage() {
                     <td style={{ padding: '10px', border: '1px solid #ddd' }}>{client.name}</td>
                     <td style={{ padding: '10px', border: '1px solid #ddd' }}>{client.email}</td>
                     <td style={{ padding: '10px', border: '1px solid #ddd' }}>{client.phone_number}</td>
+                    <td style={{ padding: '10px', border: '1px solid #ddd', whiteSpace: 'pre-wrap' }}>
+                      {client.billing_address}
+                    </td>
                     <td style={{ padding: '10px', border: '1px solid #ddd' }}>
                       {new Date(client.created_at).toLocaleDateString()}
+                    </td>
+                    <td style={{ padding: '10px', textAlign: 'center', border: '1px solid #ddd' }}>
+                      <button
+                        onClick={() => deleteClient(client.id, client.name)}
+                        style={{
+                          padding: '8px 12px',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '4px',
+                          cursor: 'pointer',
+                          fontSize: '18px',
+                        }}
+                        title="Delete Client"
+                      >
+                        🗑️
+                      </button>
                     </td>
                   </tr>
                 ))}

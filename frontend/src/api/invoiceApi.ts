@@ -40,4 +40,9 @@ export const invoiceApi = {
     });
     return response.data;
   },
+
+  // Delete an invoice by ID
+  async deleteInvoice(id: number): Promise<void> {
+    await client.delete(`/invoices/${id}`);
+  },
 };

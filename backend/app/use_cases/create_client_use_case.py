@@ -8,6 +8,16 @@ def execute(db: Session, name: str, billing_address: str, email: str, phone_numb
     Create a new client with validation.
     Business logic layer - works with domain models.
     """
+    # Initialize DAO
+    client_dao = ClientDAO(db)
+
+    # Check for duplicate email
+    if client_dao.email_exists(email):
+        raise ValueError(
+            f"A client with email '{email}' already exists. "
+            "Please use a different email address."
+        )
+
     # Create domain model
     client = Client(
         name=name,
@@ -20,7 +30,6 @@ def execute(db: Session, name: str, billing_address: str, email: str, phone_numb
     client.validate()
 
     # Persist via DAO (DAO handles commit)
-    client_dao = ClientDAO(db)
     saved_client = client_dao.create(client)
 
     return saved_client

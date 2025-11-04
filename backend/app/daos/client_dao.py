@@ -41,6 +41,34 @@ class ClientDAO:
         db_clients = self.db.query(ClientTable).all()
         return [self._to_domain(client) for client in db_clients]
 
+    def delete(self, client_id: int) -> bool:
+        """
+        Delete a client by ID.
+        Returns True if deleted, False if not found.
+        """
+        db_client = (
+            self.db.query(ClientTable)
+            .filter(ClientTable.id == client_id)
+            .first()
+        )
+        if db_client:
+            self.db.delete(db_client)
+            self.db.commit()
+            return True
+        return False
+
+    def email_exists(self, email: str) -> bool:
+        """
+        Check if a client with the given email already exists.
+        Returns True if email exists, False otherwise.
+        """
+        count = (
+            self.db.query(ClientTable)
+            .filter(ClientTable.email == email)
+            .count()
+        )
+        return count > 0
+
     def _to_domain(self, db_client: ClientTable) -> Client:
         """Convert SQLAlchemy model to domain model"""
         return Client(

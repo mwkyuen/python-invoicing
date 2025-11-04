@@ -59,6 +59,15 @@ class InvoiceDAO:
         db_invoices = self.db.query(InvoiceTable).all()
         return [self._to_domain(invoice) for invoice in db_invoices]
 
+    def has_invoices_for_client(self, client_id: int) -> bool:
+        """Check if any invoices exist for a given client"""
+        count = (
+            self.db.query(InvoiceTable)
+            .filter(InvoiceTable.client_id == client_id)
+            .count()
+        )
+        return count > 0
+
     def update_status(self, invoice_id: int, status: str) -> Optional[Invoice]:
         """Update invoice status"""
         db_invoice = (
@@ -116,6 +125,27 @@ class InvoiceDAO:
             number = 1
 
         return f"INV-{year}-{number:04d}"
+
+    def delete(self, invoice_id: int) -> bool:
+        """
+        Delete an invoice by ID (cascade deletes line items).
+        Returns True if deleted, False if not found.
+        """
+        db_invoice = (
+            self.db.query(InvoiceTable)
+            .filter(InvoiceTable.id == invoice_id)
+            .first()
+        )
+        if db_invoice:
+            # Delete associated line items first
+            self.db.query(LineItemTable).filter(
+                LineItemTable.invoice_id == invoice_id
+            ).delete()
+            # Delete the invoice
+            self.db.delete(db_invoice)
+            self.db.commit()
+            return True
+        return False
 
     def _to_domain(self, db_invoice: InvoiceTable) -> Invoice:
         """Convert SQLAlchemy model to domain model"""

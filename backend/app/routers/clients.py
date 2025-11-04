@@ -4,7 +4,11 @@ from typing import List
 
 from app.db import get_db
 from app.models.client import ClientCreateRequest, ClientResponse
-from app.use_cases import create_client_use_case, list_clients_use_case
+from app.use_cases import (
+    create_client_use_case,
+    list_clients_use_case,
+    delete_client_use_case
+)
 
 router = APIRouter(prefix="/api/clients", tags=["clients"])
 
@@ -56,4 +60,19 @@ def get_client(client_id: int, db: Session = Depends(get_db)):
             return None
         return ClientResponse.from_domain(client)
     except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.delete("/{client_id}", status_code=204)
+def delete_client(client_id: int, db: Session = Depends(get_db)):
+    """Delete a client by ID"""
+    try:
+        deleted = delete_client_use_case.execute(db, client_id)
+        if not deleted:
+            raise HTTPException(status_code=404, detail="Client not found")
+        return None
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        db.rollback()
         raise HTTPException(status_code=500, detail=str(e))

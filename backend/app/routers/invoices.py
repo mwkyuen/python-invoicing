@@ -12,7 +12,8 @@ from app.models.invoice import (
 from app.use_cases import (
     create_invoice_use_case,
     list_invoices_use_case,
-    update_invoice_status_use_case
+    update_invoice_status_use_case,
+    delete_invoice_use_case
 )
 
 router = APIRouter(prefix="/api/invoices", tags=["invoices"])
@@ -93,6 +94,21 @@ def update_invoice_status(
         if not invoice:
             raise HTTPException(status_code=404, detail="Invoice not found")
         return InvoiceResponse.from_domain(invoice)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.delete("/{invoice_id}", status_code=204)
+def delete_invoice(invoice_id: int, db: Session = Depends(get_db)):
+    """Delete an invoice by ID (cascade deletes line items)"""
+    try:
+        deleted = delete_invoice_use_case.execute(db, invoice_id)
+        if not deleted:
+            raise HTTPException(status_code=404, detail="Invoice not found")
+        return None
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:

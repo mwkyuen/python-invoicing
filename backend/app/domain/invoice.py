@@ -58,8 +58,8 @@ class Invoice:
         return self.pdf_path is not None
 
     def can_update_status(self, new_status: str) -> bool:
-        """Business rule: Check if status transition is valid"""
-        # Example: Can't change from "paid" back to "draft"
-        if self.status == "paid" and new_status == "draft":
-            return False
+        """
+        Allow all status transitions.
+        PDF will be regenerated to reflect current status.
+        """
         return True

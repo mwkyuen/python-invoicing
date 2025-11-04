@@ -102,10 +102,12 @@ def update_invoice_status(
 
 @router.get("/{invoice_id}/pdf")
 def download_invoice_pdf(invoice_id: int, db: Session = Depends(get_db)):
-    """Download invoice PDF"""
+    """Download invoice PDF with cache-busting to ensure latest version"""
     try:
-        # Get invoice
+        from pathlib import Path
         from app.daos.invoice_dao import InvoiceDAO
+
+        # Get invoice
         invoice_dao = InvoiceDAO(db)
         invoice = invoice_dao.get_by_id(invoice_id)
 
@@ -116,10 +118,25 @@ def download_invoice_pdf(invoice_id: int, db: Session = Depends(get_db)):
             raise HTTPException(
                 status_code=404, detail="PDF not yet generated"
             )
+
+        # Verify PDF file exists
+        pdf_file = Path(invoice.pdf_path)
+        if not pdf_file.exists():
+            raise HTTPException(
+                status_code=404,
+                detail="PDF file not found on server"
+            )
+
+        # Return with cache-busting headers to ensure fresh download
         return FileResponse(
             invoice.pdf_path,
             media_type="application/pdf",
-            filename=f"{invoice.invoice_number}.pdf"
+            filename=f"{invoice.invoice_number}.pdf",
+            headers={
+                "Cache-Control": "no-cache, no-store, must-revalidate",
+                "Pragma": "no-cache",
+                "Expires": "0"
+            }
         )
     except HTTPException:
         raise

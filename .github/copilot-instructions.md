@@ -10,7 +10,7 @@ Full-stack invoicing application with React/TypeScript frontend and FastAPI/Pyth
 ### Tech Stack
 - **Backend**: Python 3.10, FastAPI, Pydantic, SQLite
 - **Frontend**: React, TypeScript
-- **PDF Generation**: Playwright (headless Chromium) with HTML templates
+- **PDF Generation**: WeasyPrint (pure Python) with HTML/CSS templates
 - **Database**: SQLite with simple schema design
 - **Environment**: Conda (environment.yml)
 
@@ -26,7 +26,7 @@ python-invoicing/
 │   │   ├── use_cases/       # Use-case layer: Business logic and orchestration
 │   │   ├── daos/            # Data Access Objects: Database operations
 │   │   ├── db.py            # Database connection and session management
-│   │   └── pdf_generator.py # PDF generation with Playwright
+│   │   └── pdf_generator.py # PDF generation with WeasyPrint
 │   ├── tests/               # Backend tests (pytest)
 │   ├── environment.yml      # Conda environment definition
 │   └── main.py              # FastAPI application entry point
@@ -256,7 +256,6 @@ The frontend consists of four main pages:
 cd backend
 conda env create -f environment.yml  # First time only
 conda activate invoicing
-playwright install chromium          # First time only
 uvicorn main:app --reload            # Runs on http://localhost:8000
 ```
 

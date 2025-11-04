@@ -13,7 +13,6 @@ chmod +x setup.sh && ./setup.sh
 cd backend
 conda env create -f environment.yml
 conda activate invoicing
-playwright install chromium
 uvicorn main:app --reload
 ```
 
@@ -30,7 +29,7 @@ Open **http://localhost:5173** in your browser.
 
 ## PDF Generation
 
-This application uses **Playwright** (headless Chromium) to generate professional invoice PDFs from HTML templates. PDFs are automatically generated when you create an invoice and stored in `backend/generated_invoices/`.
+This application uses **WeasyPrint** (pure Python PDF library) to generate professional invoice PDFs from HTML/CSS templates. PDFs are automatically generated when you create an invoice and stored in `backend/generated_invoices/`.
 
 ## Managing the Conda Environment
 

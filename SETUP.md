@@ -19,12 +19,7 @@
    conda activate invoicing
    ```
 
-4. **Install Playwright browsers** (first time only):
-   ```bash
-   playwright install chromium
-   ```
-
-5. **Run the backend server**:
+4. **Run the backend server**:
    ```bash
    uvicorn main:app --reload
    ```
@@ -77,7 +72,7 @@ python-invoicing/
 │   │   ├── use_cases/       # Business logic layer
 │   │   ├── routers/         # API endpoints
 │   │   ├── db.py            # Database setup
-│   │   └── pdf_generator.py # PDF generation with Playwright
+│   │   └── pdf_generator.py # PDF generation with WeasyPrint
 │   ├── main.py              # FastAPI application
 │   └── environment.yml      # Conda environment definition
 │

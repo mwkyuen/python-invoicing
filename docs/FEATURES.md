@@ -26,7 +26,7 @@ This document describes all features implemented in the Python Invoicing System.
 - **Auto-numbering**: Sequential invoice numbers (INV-2025-0001, INV-2025-0002, etc.)
 - **Status Tracking**: Draft → Sent → Paid or Cancelled
 - **Auto-calculation**: Total amounts calculated automatically from line items
-- **PDF Generation**: Automatic PDF creation using Playwright + HTML templates
+- **PDF Generation**: Automatic PDF creation using WeasyPrint + HTML/CSS templates
 - **Delete Invoices**: Remove invoices with cascade deletion of line items
 
 ### Dashboard
@@ -204,7 +204,7 @@ POST /api/clients {"email": "john@example.com", ...}
 ```
 POST /api/clients {"email": "john@example.com", ...}
 → 400 Bad Request ❌
-→ Error: "A client with email 'john@example.com' already exists. 
+→ Error: "A client with email 'john@example.com' already exists.
    Please use a different email address."
 ```
 
@@ -215,12 +215,12 @@ POST /api/clients {"email": "john@example.com", ...}
 
 ### Technical Details
 
-**Performance**: 
+**Performance**:
 - Uses COUNT query (fast, efficient)
 - No need to fetch full client records
 - Indexed email column recommended for production
 
-**Case Sensitivity**: 
+**Case Sensitivity**:
 - Currently case-sensitive
 - "john@example.com" ≠ "John@Example.com"
 - Both can exist (future enhancement: case-insensitive)
@@ -258,13 +258,13 @@ Three action patterns for viewing and managing invoices from the dashboard.
 
 ### Dashboard-Centric Pattern
 
-**Design Philosophy**: 
+**Design Philosophy**:
 All actions (Edit Status, Download PDF) are performed from the dashboard list, not from individual invoice pages.
 
 **User Flows**:
 ```
 View Details:  Dashboard → Click 👁️ View → See details → Back to Dashboard
-Edit Status:   Dashboard → Click ✏️ Edit → Change status → Back to Dashboard  
+Edit Status:   Dashboard → Click ✏️ Edit → Change status → Back to Dashboard
 Download PDF:  Dashboard → Click 📥 PDF → File downloads → Stay on Dashboard
 ```
 
@@ -290,7 +290,7 @@ Added HTTP cache-busting headers to force browsers to fetch fresh PDFs.
 @router.get("/{invoice_id}/pdf")
 async def download_invoice_pdf(invoice_id: int, db: Session = Depends(get_db)):
     # ... fetch invoice and generate PDF ...
-    
+
     return FileResponse(
         pdf_path,
         media_type="application/pdf",
@@ -335,7 +335,7 @@ async def download_invoice_pdf(invoice_id: int, db: Session = Depends(get_db)):
 | **Invoice CRUD** | ✅ Complete | DAO + Use-Case + Router | API + UI | Line items required |
 | **Delete Operations** | ✅ Complete | Cascade deletion | Confirmation dialog | Client invoice check |
 | **Email Uniqueness** | ✅ Complete | Database COUNT query | Error display | None |
-| **PDF Generation** | ✅ Complete | Playwright + HTML | Download button | None |
+| **PDF Generation** | ✅ Complete | WeasyPrint + HTML/CSS | Download button | None |
 | **PDF Cache Fix** | ✅ Complete | HTTP headers | None | None |
 | **Dashboard UI** | ✅ Complete | N/A | Tabbed interface | None |
 | **Invoice Viewing** | ✅ Complete | Get endpoints | Read-only page | None |

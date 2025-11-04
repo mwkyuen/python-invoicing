@@ -36,7 +36,7 @@ def execute(
         line_item.validate()
         line_items.append(line_item)
 
-    # Create invoice domain model
+    # Create invoice domain model (without ID, for PDF generation)
     invoice = Invoice(
         invoice_number=invoice_number,
         client_id=client_id,
@@ -49,19 +49,17 @@ def execute(
     # Domain validation
     invoice.validate()
 
-    # Persist via DAO (DAO handles commit)
-    saved_invoice = invoice_dao.create(invoice)
-
-    # Generate PDF
+    # Generate PDF before saving to database
+    pdf_path = None
     try:
         from app.pdf_generator import generate_invoice_pdf
-        pdf_path = generate_invoice_pdf(saved_invoice, client)
-        # Update PDF path (DAO handles commit)
-        invoice_dao.update_pdf_path(saved_invoice.id, pdf_path)
-        # Reload to get updated pdf_path
-        saved_invoice = invoice_dao.get_by_id(saved_invoice.id)
+        pdf_path = generate_invoice_pdf(invoice, client)
+        invoice.pdf_path = pdf_path
     except Exception as e:
         # Log error but don't fail the invoice creation
         print(f"Warning: Failed to generate PDF: {e}")
+
+    # Persist via DAO with pdf_path already set (DAO handles commit)
+    saved_invoice = invoice_dao.create(invoice)
 
     return saved_invoice

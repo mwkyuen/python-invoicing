@@ -1,11 +1,10 @@
 """
-PDF generation using Playwright for invoice rendering.
-Generates professional invoice PDFs from HTML templates.
+PDF generation using WeasyPrint for invoice rendering.
+Simpler and more reliable than Playwright - no browser dependencies.
 """
-import os
 from pathlib import Path
 from datetime import datetime
-from playwright.sync_api import sync_playwright
+from weasyprint import HTML
 from jinja2 import Template
 
 from app.domain.invoice import Invoice
@@ -179,7 +178,13 @@ INVOICE_TEMPLATE = """
 
 def generate_invoice_pdf(invoice: Invoice, client: Client) -> str:
     """
-    Generate a PDF invoice using Playwright.
+    Generate a PDF invoice using WeasyPrint.
+
+    Much simpler than Playwright:
+    - No browser required
+    - No hanging or blocking
+    - Faster (< 1 second)
+    - Pure Python
 
     Args:
         invoice: Invoice domain model with line items
@@ -188,62 +193,7 @@ def generate_invoice_pdf(invoice: Invoice, client: Client) -> str:
     Returns:
         Path to the generated PDF file
     """
-    # Create output directory if it doesn't exist
-    output_dir = Path("generated_invoices")
-    output_dir.mkdir(exist_ok=True)
-
-    # Generate filename
-    pdf_filename = f"{invoice.invoice_number}.pdf"
-    pdf_path = output_dir / pdf_filename
-
-    # Render HTML from template
-    template = Template(INVOICE_TEMPLATE)
-    html_content = template.render(
-        invoice=invoice,
-        client=client,
-        now=datetime.now()
-    )
-
-    # Generate PDF using Playwright
-    with sync_playwright() as p:
-        browser = p.chromium.launch()
-        page = browser.new_page()
-
-        # Set content and wait for fonts to load
-        page.set_content(html_content)
-        page.wait_for_load_state("networkidle")
-
-        # Generate PDF with specific options
-        page.pdf(
-            path=str(pdf_path),
-            format="A4",
-            margin={
-                "top": "20mm",
-                "right": "15mm",
-                "bottom": "20mm",
-                "left": "15mm"
-            },
-            print_background=True
-        )
-
-        browser.close()
-
-    return str(pdf_path)
-
-
-async def generate_invoice_pdf_async(invoice: Invoice, client: Client) -> str:
-    """
-    Async version of PDF generation using Playwright.
-    Useful for background tasks and non-blocking operations.
-
-    Args:
-        invoice: Invoice domain model with line items
-        client: Client domain model
-
-    Returns:
-        Path to the generated PDF file
-    """
-    from playwright.async_api import async_playwright
+    print(f"[PDF Generator] Starting PDF generation for {invoice.invoice_number}")
 
     # Create output directory if it doesn't exist
     output_dir = Path("generated_invoices")
@@ -253,6 +203,7 @@ async def generate_invoice_pdf_async(invoice: Invoice, client: Client) -> str:
     pdf_filename = f"{invoice.invoice_number}.pdf"
     pdf_path = output_dir / pdf_filename
 
+    print("[PDF Generator] Rendering HTML template...")
     # Render HTML from template
     template = Template(INVOICE_TEMPLATE)
     html_content = template.render(
@@ -261,28 +212,13 @@ async def generate_invoice_pdf_async(invoice: Invoice, client: Client) -> str:
         now=datetime.now()
     )
 
-    # Generate PDF using Playwright (async)
-    async with async_playwright() as p:
-        browser = await p.chromium.launch()
-        page = await browser.new_page()
-
-        # Set content and wait for fonts to load
-        await page.set_content(html_content)
-        await page.wait_for_load_state("networkidle")
-
-        # Generate PDF with specific options
-        await page.pdf(
-            path=str(pdf_path),
-            format="A4",
-            margin={
-                "top": "20mm",
-                "right": "15mm",
-                "bottom": "20mm",
-                "left": "15mm"
-            },
-            print_background=True
-        )
-
-        await browser.close()
+    print("[PDF Generator] Generating PDF with WeasyPrint...")
+    try:
+        # Generate PDF - simple one-liner!
+        HTML(string=html_content).write_pdf(str(pdf_path))
+        print(f"[PDF Generator] PDF created successfully: {pdf_path}")
+    except Exception as e:
+        print(f"[PDF Generator] ERROR: Failed to generate PDF: {e}")
+        raise
 
     return str(pdf_path)

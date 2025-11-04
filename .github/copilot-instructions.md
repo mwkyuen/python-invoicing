@@ -198,7 +198,7 @@ Router (converts) → Pydantic response → HTTP Response (JSON)
 - Router: Converts domain models to response list
 
 ### Testing
-- Use `pytest` with `pytest-asyncio` for async FastAPI tests
+- Use `pytest`
 - Use TestClient from `fastapi.testclient` for endpoint testing
 - Mock database with in-memory SQLite for isolated tests
 

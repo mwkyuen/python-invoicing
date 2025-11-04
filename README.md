@@ -26,9 +26,15 @@ See [QUICKSTART.md](QUICKSTART.md) for one-command setup or [SETUP.md](SETUP.md)
 
 ## 📚 Documentation
 
-- **[Copilot Instructions](.github/copilot-instructions.md)** - AI agent guidance and architecture overview
+### Getting Started
+- **[QUICKSTART.md](QUICKSTART.md)** - One-command setup with Conda
+- **[SETUP.md](SETUP.md)** - Detailed installation and configuration
+
+### Developer Documentation  
 - **[Developer Onboarding](.github/ONBOARDING.md)** - New developer guide with domain models explained
 - **[API Specification](.github/APPLICATION_SPEC.md)** - Complete API endpoints and workflows
+- **[Features Guide](docs/FEATURES.md)** - All implemented features with examples
+- **[Copilot Instructions](.github/copilot-instructions.md)** - AI agent guidance and architecture overview
 - **[Prompt Templates](.github/prompts/)** - Reusable prompts for common development tasks
 
 ## 🏗️ Architecture
@@ -45,13 +51,17 @@ See [ONBOARDING.md](.github/ONBOARDING.md) for detailed architecture explanation
 
 ## 📦 Features
 
-- ✅ Create and manage clients
-- ✅ Generate invoices with line items
-- ✅ Auto-calculated totals
-- ✅ Invoice status tracking (draft/sent/paid/cancelled)
-- ✅ Sequential invoice numbering
-- ✅ PDF generation (Playwright + HTML templates)
-- ✅ RESTful API with OpenAPI docs
+### Core Functionality
+- ✅ **Client Management** - Create, view, delete clients with email uniqueness validation
+- ✅ **Invoice Management** - Generate invoices with line items and status tracking
+- ✅ **Auto-Calculations** - Totals calculated automatically from line items
+- ✅ **Sequential Numbering** - Auto-generated invoice numbers (INV-2025-0001, etc.)
+- ✅ **PDF Generation** - Professional PDFs using Playwright + HTML templates
+- ✅ **Status Tracking** - Draft → Sent → Paid or Cancelled workflows
+- ✅ **Data Protection** - Validation prevents deleting clients with invoices
+- ✅ **Dashboard UI** - Tabbed interface with action buttons and delete column
+
+See [docs/FEATURES.md](docs/FEATURES.md) for detailed feature documentation.
 
 ## 🎯 API Endpoints
 

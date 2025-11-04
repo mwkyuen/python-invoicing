@@ -22,7 +22,7 @@ Welcome to the Python Invoicing System documentation! This guide helps you find 
   - Domain models (Client, Invoice, LineItem)
   - Data flow through layers (Router → Use-Case → DAO)
   - Model types (Domain, Pydantic, SQLAlchemy)
-  
+
 - **[copilot-instructions.md](../.github/copilot-instructions.md)** - AI agent guidance
   - Tech stack overview
   - Backend conventions

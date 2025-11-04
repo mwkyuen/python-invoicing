@@ -30,7 +30,7 @@ See [QUICKSTART.md](QUICKSTART.md) for one-command setup or [SETUP.md](SETUP.md)
 - **[QUICKSTART.md](QUICKSTART.md)** - One-command setup with Conda
 - **[SETUP.md](SETUP.md)** - Detailed installation and configuration
 
-### Developer Documentation  
+### Developer Documentation
 - **[Developer Onboarding](.github/ONBOARDING.md)** - New developer guide with domain models explained
 - **[API Specification](.github/APPLICATION_SPEC.md)** - Complete API endpoints and workflows
 - **[Features Guide](docs/FEATURES.md)** - All implemented features with examples

@@ -77,7 +77,7 @@ python-invoicing/
 **Purpose**: Architecture & API reference
 
 - **ONBOARDING.md** - Architecture guide with domain models
-- **APPLICATION_SPEC.md** - Complete API specification  
+- **APPLICATION_SPEC.md** - Complete API specification
 - **copilot-instructions.md** - AI agent guidance
 - **prompts/** - Development task templates
 

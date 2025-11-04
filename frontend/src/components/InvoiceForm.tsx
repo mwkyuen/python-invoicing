@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { clientApi } from '../api/clientApi';
 import { invoiceApi } from '../api/invoiceApi';
 import { Client } from '../types/Client';
-import { LineItemCreateRequest } from '../types/Invoice';
+import { Invoice, LineItemCreateRequest } from '../types/Invoice';
 import ErrorMessage from './ErrorMessage';
 import LoadingSpinner from './LoadingSpinner';
 
@@ -17,6 +17,7 @@ export default function InvoiceForm() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [loadingClients, setLoadingClients] = useState(true);
+  const [createdInvoice, setCreatedInvoice] = useState<Invoice | null>(null);
 
   useEffect(() => {
     loadClients();
@@ -67,8 +68,7 @@ export default function InvoiceForm() {
         client_id: selectedClientId as number,
         line_items: lineItems,
       });
-      alert(`Invoice ${invoice.invoice_number} created successfully!`);
-      navigate('/');
+      setCreatedInvoice(invoice);
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Failed to create invoice');
     } finally {
@@ -77,6 +77,63 @@ export default function InvoiceForm() {
   };
 
   if (loadingClients) return <LoadingSpinner />;
+
+  // Show success message after invoice creation
+  if (createdInvoice) {
+    return (
+      <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+        <div style={{
+          backgroundColor: '#d4edda',
+          border: '1px solid #c3e6cb',
+          borderRadius: '4px',
+          padding: '20px',
+          marginBottom: '20px',
+        }}>
+          <h2 style={{ color: '#155724', marginTop: 0 }}>✅ Invoice Created Successfully!</h2>
+          <p style={{ fontSize: '18px', margin: '10px 0' }}>
+            <strong>Invoice Number:</strong> {createdInvoice.invoice_number}
+          </p>
+          <p style={{ fontSize: '18px', margin: '10px 0' }}>
+            <strong>Total Amount:</strong> ${createdInvoice.total_amount.toFixed(2)}
+          </p>
+          <p style={{ fontSize: '18px', margin: '10px 0' }}>
+            <strong>Status:</strong> {createdInvoice.status}
+          </p>
+        </div>
+
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <button
+            onClick={() => navigate(`/invoices/${createdInvoice.id}`)}
+            style={{
+              padding: '10px 20px',
+              backgroundColor: '#9b59b6',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontSize: '16px',
+            }}
+          >
+            👁️ View Invoice
+          </button>
+          <button
+            onClick={() => navigate('/')}
+            style={{
+              padding: '10px 20px',
+              backgroundColor: '#2ecc71',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontSize: '16px',
+            }}
+          >
+            📋 Back to Dashboard
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit} style={{ maxWidth: '800px', margin: '0 auto' }}>

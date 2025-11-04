@@ -3,6 +3,7 @@ import DashboardPage from './pages/DashboardPage';
 import CreateClientPage from './pages/CreateClientPage';
 import CreateInvoicePage from './pages/CreateInvoicePage';
 import UpdateInvoicePage from './pages/UpdateInvoicePage';
+import ViewInvoicePage from './pages/ViewInvoicePage';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/" element={<DashboardPage />} />
           <Route path="/clients/new" element={<CreateClientPage />} />
           <Route path="/invoices/new" element={<CreateInvoicePage />} />
+          <Route path="/invoices/:id" element={<ViewInvoicePage />} />
           <Route path="/invoices/:id/edit" element={<UpdateInvoicePage />} />
         </Routes>
       </div>

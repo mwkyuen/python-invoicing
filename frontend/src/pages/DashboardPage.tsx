@@ -154,35 +154,52 @@ export default function DashboardPage() {
                         <InvoiceStatusBadge status={invoice.status} />
                       </td>
                       <td style={{ padding: '10px', textAlign: 'center', border: '1px solid #ddd' }}>
-                        <button
-                          onClick={() => navigate(`/invoices/${invoice.id}/edit`)}
-                          style={{
-                            padding: '5px 10px',
-                            marginRight: '5px',
-                            backgroundColor: '#3498db',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '4px',
-                            cursor: 'pointer',
-                          }}
-                        >
-                          Edit Status
-                        </button>
-                        {invoice.pdf_path && (
+                        <div style={{ display: 'flex', gap: '5px', justifyContent: 'center' }}>
                           <button
-                            onClick={() => downloadPDF(invoice.id, invoice.invoice_number)}
+                            onClick={() => navigate(`/invoices/${invoice.id}`)}
                             style={{
                               padding: '5px 10px',
-                              backgroundColor: '#2ecc71',
+                              backgroundColor: '#9b59b6',
                               color: 'white',
                               border: 'none',
                               borderRadius: '4px',
                               cursor: 'pointer',
                             }}
+                            title="View Invoice"
                           >
-                            Download PDF
+                            👁️ View
                           </button>
-                        )}
+                          <button
+                            onClick={() => navigate(`/invoices/${invoice.id}/edit`)}
+                            style={{
+                              padding: '5px 10px',
+                              backgroundColor: '#3498db',
+                              color: 'white',
+                              border: 'none',
+                              borderRadius: '4px',
+                              cursor: 'pointer',
+                            }}
+                            title="Edit Status"
+                          >
+                            ✏️ Edit
+                          </button>
+                          {invoice.pdf_path && (
+                            <button
+                              onClick={() => downloadPDF(invoice.id, invoice.invoice_number)}
+                              style={{
+                                padding: '5px 10px',
+                                backgroundColor: '#2ecc71',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '4px',
+                                cursor: 'pointer',
+                              }}
+                              title="Download PDF"
+                            >
+                              📥 PDF
+                            </button>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   );

@@ -4,10 +4,13 @@ A full-stack invoicing application with React/TypeScript frontend and FastAPI/Py
 
 ## 🚀 Quick Start
 
+**Prerequisites**: [Conda](https://docs.conda.io/en/latest/miniconda.html) and [Node.js](https://nodejs.org/)
+
 **Backend**:
 ```bash
 cd backend
-pip install -r requirements.txt
+conda env create -f environment.yml
+conda activate invoicing
 uvicorn main:app --reload  # http://localhost:8000
 ```
 
@@ -18,11 +21,19 @@ npm install
 npm run dev  # http://localhost:5173
 ```
 
+See [QUICKSTART.md](QUICKSTART.md) for one-command setup or [SETUP.md](SETUP.md) for detailed instructions.
+
 ## 📚 Documentation
 
-- **[Copilot Instructions](.github/copilot-instructions.md)** - AI agent guidance and architecture overview
+### Getting Started
+- **[QUICKSTART.md](QUICKSTART.md)** - One-command setup with Conda
+- **[SETUP.md](SETUP.md)** - Detailed installation and configuration
+
+### Developer Documentation
 - **[Developer Onboarding](.github/ONBOARDING.md)** - New developer guide with domain models explained
 - **[API Specification](.github/APPLICATION_SPEC.md)** - Complete API endpoints and workflows
+- **[Features Guide](docs/FEATURES.md)** - All implemented features with examples
+- **[Copilot Instructions](.github/copilot-instructions.md)** - AI agent guidance and architecture overview
 - **[Prompt Templates](.github/prompts/)** - Reusable prompts for common development tasks
 
 ## 🏗️ Architecture
@@ -33,19 +44,23 @@ Clean Architecture with:
 - **DAOs** - Database operations
 - **Routers** - FastAPI HTTP endpoints
 
-**Tech Stack**: FastAPI, Pydantic, SQLAlchemy, SQLite, React, TypeScript
+**Tech Stack**: Python 3.10, FastAPI, Pydantic, SQLAlchemy, SQLite, WeasyPrint, React, TypeScript, Conda
 
 See [ONBOARDING.md](.github/ONBOARDING.md) for detailed architecture explanation.
 
 ## 📦 Features
 
-- ✅ Create and manage clients
-- ✅ Generate invoices with line items
-- ✅ Auto-calculated totals
-- ✅ Invoice status tracking (draft/sent/paid/cancelled)
-- ✅ Sequential invoice numbering
-- ✅ PDF generation
-- ✅ RESTful API with OpenAPI docs
+### Core Functionality
+- ✅ **Client Management** - Create, view, delete clients with email uniqueness validation
+- ✅ **Invoice Management** - Generate invoices with line items and status tracking
+- ✅ **Auto-Calculations** - Totals calculated automatically from line items
+- ✅ **Sequential Numbering** - Auto-generated invoice numbers (INV-2025-0001, etc.)
+- ✅ **PDF Generation** - Professional PDFs using WeasyPrint + HTML/CSS templates
+- ✅ **Status Tracking** - Draft → Sent → Paid or Cancelled workflows
+- ✅ **Data Protection** - Validation prevents deleting clients with invoices
+- ✅ **Dashboard UI** - Tabbed interface with action buttons and delete column
+
+See [docs/FEATURES.md](docs/FEATURES.md) for detailed feature documentation.
 
 ## 🎯 API Endpoints
 

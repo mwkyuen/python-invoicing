@@ -1,0 +1,17 @@
+name: invoicing
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pip
+  - weasyprint>=60.0
+  - pip:
+    - fastapi==0.104.1
+    - uvicorn[standard]==0.24.0
+    - sqlalchemy==2.0.23
+    - pydantic==2.5.0
+    - python-multipart==0.0.6
+    - jinja2==3.1.2
+    - pytest==7.4.3
+    - email-validator==2.1.0

@@ -60,9 +60,24 @@ Create the complete React/TypeScript frontend for the invoicing application:
    **Dashboard/List Views**:
    - Clients table: name, email, created date, actions
    - Invoices table: invoice_number, client name, total, status, date, actions
-   - Actions: View, Edit status, Download PDF
+   - Actions: View (opens detail page), Edit status, Download PDF
    - Error handling for API failures
 
-6. **Styling**: Use simple CSS or Tailwind CSS for clean, professional form layout.
+   **View Invoice Page** (`/invoices/:id`):
+   - Display complete invoice details in browser (read-only view)
+   - Show invoice header (number, date, status, total)
+   - Show client information (name, email, phone, address)
+   - Show line items table with quantities, prices, amounts
+   - Back to Dashboard button only
+   - No action buttons (all actions available from dashboard list)
+   - Fetch from `GET /api/invoices/{id}` and `GET /api/clients/{id}`
+
+7. **Post-Creation Success**:
+   - After creating an invoice, show success message with invoice details
+   - Provide buttons to: View Invoice, Back to Dashboard
+   - No automatic redirect - let user choose next action
+   - All actions (Edit Status, Download PDF) available from dashboard list
+
+8. **Styling**: Use simple CSS or Tailwind CSS for clean, professional form layout.
 
 Follow React/TypeScript best practices and ensure type safety throughout.

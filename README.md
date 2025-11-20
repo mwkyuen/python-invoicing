@@ -1,6 +1,6 @@
 # Python Invoicing System
 
-**THIS CODE WAS WRITTEN BY COPILOT - see copilot_chat_01.m1 for details** A full-stack invoicing application with React/TypeScript frontend and FastAPI/Python backend. Create clients, generate invoices with line items, and track invoice status.
+**THIS CODE WAS WRITTEN BY COPILOT** - see copilot_chat_01.m1 for details. This is a full-stack invoicing application with React/TypeScript frontend and FastAPI/Python backend. Create clients, generate invoices with line items, and track invoice status.
 
 ## 🚀 Quick Start
 
